@@ -17,6 +17,9 @@
         #nameList li {
             list-style: none;
             padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .chosen {
             color: red;
@@ -34,6 +37,19 @@
             background-color: #f3f3f3;
             color: rgb(5, 5, 5);
             border-color: #050505;
+        }
+        .remove-btn {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #FF4C4C;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .remove-btn:hover {
+            background-color: #f3f3f3;
+            color: rgb(5, 5, 5);
         }
         input {
             padding: 10px;
@@ -69,19 +85,56 @@
             const name = nameInput.value.trim();
             if (name) {
                 names.push(name);
-                const nameList = document.getElementById('nameList');
-                const li = document.createElement('li');
-                li.textContent = name;
-                nameList.appendChild(li);
+                updateNameList();
                 nameInput.value = '';
             }
+        }
+
+        function updateNameList() {
+            const nameList = document.getElementById('nameList');
+            nameList.innerHTML = ''; // Clear current list
+
+            names.forEach((name, index) => {
+                const li = document.createElement('li');
+                li.textContent = name;
+
+                // Create remove button
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.className = 'remove-btn';
+                removeButton.onclick = () => removeName(index);
+
+                li.appendChild(removeButton);
+                nameList.appendChild(li);
+            });
+        }
+
+        function removeName(index) {
+            names.splice(index, 1); // Remove the name from the array
+            updateNameList(); // Refresh the list display
         }
 
         function chooseRandom() {
             if (names.length > 0) {
                 const randomIndex = Math.floor(Math.random() * names.length);
                 const chosenName = names[randomIndex];
-                document.getElementById('result').textContent = `Chosen: ${chosenName}`;
+
+                // Randomized messages
+                const messages = [
+                    `${chosenName} is the boss's favorite employee!`,
+                    `The boss is proud of you ${chosenName}, keep up the good work!`,
+                    `Worshipping the boss paid off, now he wants to keep you forever ${chosenName}!`,
+                    `${chosenName}, the boss has chosen you... but no one really knows why. Even the boss is confused!`,
+                    `${chosenName}, you are the chosen one! This is like a prophecy… except it’s about coffee runs.`,
+                    `The boss likes you so much, ${chosenName}, he’s commissioning a statue in your honor... out of paperclips.`,
+                    `${chosenName}, the boss thinks you’re amazing, but mostly because you bring the best snacks.`
+                ];
+
+                // Choose a random message from the array
+                const randomMessageIndex = Math.floor(Math.random() * messages.length);
+                const chosenMessage = messages[randomMessageIndex];
+
+                document.getElementById('result').textContent = chosenMessage;
             } else {
                 document.getElementById('result').textContent = 'No names to choose from!';
             }
@@ -90,3 +143,5 @@
 
 </body>
 </html>
+
+
